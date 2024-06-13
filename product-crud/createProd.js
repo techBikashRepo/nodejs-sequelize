@@ -3,14 +3,16 @@ import Product from "../models/product.js";
 async function createProd() {
   try {
     const newProd = await Product.create({
-      name: "Product 1",
-      price: 20,
+      name: "Product 2",
+      price: 12,
       category: "Electronics",
     });
   } catch (err) {
-    if (err.name === "SequelizeUniqueConstraintError") {
-      console.log("Unique Constraint Error : ", err.errors[0].message);
-      return;
+    if (err.name === "SequelizeValidationError") {
+      err.errors.forEach((errItem) => {
+        console.log("Error: ", errItem.message);
+        console.log("Got Value : ", errItem.value);
+      });
     }
   }
 }

@@ -19,11 +19,32 @@ const Product = sequelize.define(
         notEmpty: {
           msg: "Please provide a name",
         },
-        notNull: "Product name is required",
+        notNull: {
+          msg: "Product name is required",
+        },
+        len: {
+          args: [3, 25],
+          msg: "Name length should be between 3 to 25 characters",
+        },
       },
     },
     price: {
       type: DataTypes.DOUBLE,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Price is required",
+        },
+        validatePrice(value) {
+          if (value <= 0 || value % 5 !== 0) {
+            throw new Error("Price must be non-zero, positive multiple of 5");
+          }
+        },
+        max: {
+          args: 100000,
+          msg: "Price should be equal to or less than 1000",
+        },
+      },
     },
     category: {
       type: DataTypes.STRING,
